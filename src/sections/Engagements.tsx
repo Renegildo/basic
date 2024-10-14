@@ -39,7 +39,12 @@ const Engagements = () => {
       </h1>
       <div className="flex gap-20 overflow-x-scroll mt-20 no-scrollbar">
         {sponsors.map(({title, text, logo}) => (
-          <SponsorCard text={text} title={title} logo={logo} />
+          <SponsorCard
+            text={text}
+            title={title}
+            logo={logo}
+            key={title}
+          />
         ))}
       </div>
     </section>
