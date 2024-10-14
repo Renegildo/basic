@@ -68,12 +68,18 @@ const Sponsors = () => {
   };
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!containerRef.current) return;
+
     if (isDragging && e.movementX !== 0) {
-      containerRef.current?.scrollBy({
+      containerRef.current.scrollBy({
         left: -e.movementX * 10,
         behavior: "smooth",
       });
-    }
+
+      gsap.to(".sponsors-scrollbar", {
+        width: containerRef.current.scrollLeft,
+      });
+    };
 
     const cursorSizePx = 128;
     gsap.to(".sponsors-cursor", {
@@ -100,6 +106,10 @@ const Sponsors = () => {
             key={title}
           />
         ))}
+      </div>
+
+      <div className="w-full h-[2px] bg-gray-200 mt-5">
+        <div className="h-[2px] bg-gray-500 sponsors-scrollbar" />
       </div>
 
       <div
