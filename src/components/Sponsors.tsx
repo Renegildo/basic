@@ -35,7 +35,6 @@ const Sponsors = () => {
   ];
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [scrollOffset, setScrollOffset] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -70,9 +69,8 @@ const Sponsors = () => {
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
     if (isDragging && e.movementX !== 0) {
-      setScrollOffset(prev => prev + e.movementX);
-      containerRef.current?.scroll({
-        left: -scrollOffset * 1.5,
+      containerRef.current?.scrollBy({
+        left: -e.movementX * 10,
         behavior: "smooth",
       });
     }
