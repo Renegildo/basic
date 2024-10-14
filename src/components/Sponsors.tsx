@@ -1,5 +1,6 @@
 import { MouseEventHandler, useRef, useState } from "react";
 import SponsorCard from "./SponsorCard";
+import gsap from "gsap";
 
 const Sponsors = () => {
   const sponsors = [
@@ -40,11 +41,31 @@ const Sponsors = () => {
   const handleMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
+    gsap.to(".drag-text", {
+      scale: 0,
+      duration: 0.25,
+    });
+
+    gsap.to(".sponsors-cursor", {
+      scale: 0.5,
+      duration: 0.25,
+    });
+
     setIsDragging(true);
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+
+    gsap.to(".drag-text", {
+      scale: 1,
+      duration: 0.25,
+    });
+
+    gsap.to(".sponsors-cursor", {
+      scale: 1,
+      duration: 0.25,
+    });
   };
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -55,25 +76,43 @@ const Sponsors = () => {
         behavior: "smooth",
       });
     }
+
+    const cursorSizePx = 128;
+    gsap.to(".sponsors-cursor", {
+      left: e.pageX - cursorSizePx / 2,
+      top: e.pageY - cursorSizePx / 2,
+      ease: "power2",
+    });
   };
 
   return (
-    <div
-      className="flex gap-20 overflow-x-scroll mt-20 no-scrollbar"
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      ref={containerRef}
-    >
-      {sponsors.map(({title, text, logo}) => (
-        <SponsorCard
-          text={text}
-          title={title}
-          logo={logo}
-          key={title}
-        />
-      ))}
-    </div>
+    <>
+      <div
+        className="flex gap-20 overflow-x-scroll mt-20 cursor-none no-scrollbar"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        ref={containerRef}
+      >
+        {sponsors.map(({title, text, logo}) => (
+          <SponsorCard
+            text={text}
+            title={title}
+            logo={logo}
+            key={title}
+          />
+        ))}
+      </div>
+
+      <div
+        className="h-32 w-32 bg-pink-200 absolute rounded-full sponsors-cursor pointer-events-none
+        flex items-center justify-center"
+      >
+        <span className="font-bold tracking-wide drag-text">
+          DRAG
+        </span>
+      </div>
+    </>
   );
 };
 
